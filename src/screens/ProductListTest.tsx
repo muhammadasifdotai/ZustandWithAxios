@@ -1,16 +1,15 @@
-import React, {useEffect, useState} from 'react';
-import {FlatList, Text, TouchableOpacity, View, StyleSheet} from 'react-native';
-import {API} from '../api';
 import {useNavigation} from '@react-navigation/native';
+import React, {useEffect, useState} from 'react';
+import {View, Text, StyleSheet, FlatList, TouchableOpacity} from 'react-native';
+import {API} from '../api';
 
-const ProductListTest = () => {
+export default function ProductListTest(): JSX.Element {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
-
   const navigation = useNavigation();
 
   useEffect(() => {
-    const fetchData = async () => {
+    const FetchData = async () => {
       try {
         const response = await API.get('products');
         setProducts(response.data.products);
@@ -20,68 +19,61 @@ const ProductListTest = () => {
         setLoading(false);
       }
     };
-
-    fetchData();
+    FetchData();
   }, []);
 
   if (loading) {
-    return (
-      <View style={styles.loading}>
-        <Text>loading...</Text>
-      </View>
-    );
+    <View style={styles.loading}>
+      <Text>Loading...</Text>
+    </View>;
   }
 
   return (
     <FlatList
       data={products}
-      keyExtractor={(item) => item.id.toString()}
-      renderItem={({item}) => {
+      keyExtractor={item => item.id}
+      showsVerticalScrollIndicator={false}
+      renderItem={({item}) => (
         <TouchableOpacity
-        style={styles.card}
+          style={styles.card}
           onPress={() =>
-            navigation.navigate('ProductDetail', {ProductId: item.id})
+            navigation.navigate('ProductDetailTest', {productId: item.id})
           }>
-          <Text>{item.title}</Text>
+          <Text style={styles.titel}>{item.id}</Text>
+          <Text style={styles.titel}>{item.title}</Text>
           <Text>{item.description}</Text>
-          <Text>{item.price}</Text>
-        </TouchableOpacity>;
-      }}
+          <Text style={styles.price}>{item.price}</Text>
+        </TouchableOpacity>
+      )}
     />
   );
 }
 
 const styles = StyleSheet.create({
+  card: {
+    padding: 16,
+    margin: 10,
+    borderRadius: 10,
+    backgroundColor: 'white',
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: 2},
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 5,
+  },
   loading: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  card: {
-    padding: 16,
-    margin: 10,
-    backgroundColor: '#fff',
-    borderRadius: 8,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 5,
-  },
-  title: {
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-  description: {
-    fontSize: 14,
-    color: '#666',
-    marginVertical: 8,
-  },
   price: {
     fontSize: 16,
-    fontWeight: '600',
-    color: '#000',
+    fontWeight: 'bold',
+    marginBottom: 3,
   },
+  titel: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 5,
+  }
 });
-
-export default ProductListTest;

@@ -8,6 +8,8 @@ const ProductList = () => {
   const [loading, setLoading] = useState(true);
   const navigation = useNavigation();
 
+
+  // ..................... GET Request ...........................
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -22,6 +24,66 @@ const ProductList = () => {
 
     fetchData();
   }, []);
+
+
+// ..................... POST Request ...........................
+useEffect(() => {
+  const postData = async () => {
+    try {
+      const newProduct = {
+        name: 'New Product',
+        price: 99.99,
+        description: 'It is a AI product'
+      };
+      const response = await API.post('products/add', newProduct);
+      console.log('Product added:', response.data);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  postData();
+}, []);
+
+
+// ..................... PUT Request ...........................
+useEffect(() => {
+  const updateData = async () => {
+    try {
+      const updatedProduct = {
+        title: 'Updated Product Name',
+        price: 77.99,
+      };
+      const response = await API.put('products/1', updatedProduct); // Assuming `1` is the product ID
+      console.log('Product updated:', response.data);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  updateData();
+}, []);
+
+
+
+// ..................... DELETE Request ...........................
+useEffect(() => {
+  const deleteData = async () => {
+    try {
+      const response = await API.delete('products/1'); // Assuming `1` is the product ID
+      console.log('Product deleted:', response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  deleteData();
+}, []);
+
 
   if (loading) {
     return (

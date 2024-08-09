@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
-import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
+import { API } from '../api';
+
+// The route object holds navigation-related data.
+// route.params contains parameters passed to the screen.
+// The productId is extracted from these parameters and used within the ProductDetail component to display the relevant product details.
 
 const ProductDetail = ({ route }) => {
   const { productId } = route.params;
@@ -13,7 +17,7 @@ const ProductDetail = ({ route }) => {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const response = await axios.get(`https://dummyjson.com/products/${productId}`);
+        const response = await API.get(`/products/${productId}`);
         setProduct(response.data);
       } catch (error) {
         console.error(error);
