@@ -1,12 +1,22 @@
 import React, { useState } from "react";
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { signIn } from "../store/authApiServices";
+import useAuthStore from "../store/authStore";
 
 export default function LoginScreen(): JSX.Element {
 
     // state
     const [userName, setUserName] = useState('')
     const [password, setPassword] = useState('')
+
+    const {updatedUserData} = useAuthStore()
+    const handleUserData = () => {
+        try {
+           
+        } catch (error) {
+
+        }
+    }
 
     // Function
     const handleLogin = () => {
@@ -16,6 +26,7 @@ export default function LoginScreen(): JSX.Element {
                 password: 'emilyspass',
             }
             console.log('params: LoginScreen', params)
+            await updatedUserData(params)
             signIn(params)
         } catch (error) {
             console.log('Error During Login In LoginScreen')
